@@ -1,3 +1,6 @@
-from django.shortcuts import render
+#coding:utf-8
+from django.http import HttpResponse
 
-# Create your views here.
+
+def blog_index(request):
+    return HttpResponse(u"Hello Django")
