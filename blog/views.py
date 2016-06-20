@@ -1,16 +1,20 @@
 #coding:utf-8
-from django.http import HttpResponse
 from django.shortcuts import render_to_response
-import datetime
-
-'''
-def blog_index(request):
-    return HttpResponse(u"Hello Django")
-'''
-
+from models import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def blog_index(request):
-    now = datetime.datetime.now()
-    otherStyleTime = now.strftime("%Y-%m-%d %H:%M:%S")
-    text = "Welcom to learn django"
-    return render_to_response('blog/index.html',locals())
+    #获取文章列表
+    article = Article.objects.all().order_by('-date_publish')
+
+    #文章列表分页
+    paginator = Paginator(article, 4)
+    page = request.GET.get('page')
+    try:
+        article_list = paginator.page(page)
+    except PageNotAnInteger:
+        article_list = paginator.page(1)
+    except EmptyPage:
+        article_list = paginator.page(paginator.num_pages)
+
+    return render_to_response('blog/blog-index.html', {'article_list':article_list})
