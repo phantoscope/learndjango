@@ -1,28 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
- <div class="row">
     <div class="col-lg-12 m-b-md">
         {% for article in article_list %}
         {# django 隔行换色 #}
         {% if forloop.counter|divisibleby:"2" %}
         <div class="panel panel-info">
-            <div class="panel-heading"><h4><a href="">{{ article.title }}</a></h4></div>
+            <div class="panel-heading">
+                {{ article.title }}
+            </div>
             <div class="panel-body">
-                    {{ article.desc }}
-                    <div class="pull-right">
-                        发布日期:<span class="fa fa-calendar">{{ article.date_publish | date:'Y-m-d'}}</span>
+                <div class="row">
+                    <div class="col-lg-12 m-b-md">
+                        {{ article.desc }}
+                        <div class="pull-right">
+                            <a href="">
+                                <button type="button" class="btn btn-success">详细阅读</button>
+                            </a>
+                        </div>
                     </div>
-
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 m-b-md">
+                        <span class="label label-success">发布时间</span>{{ article.date_publish | date:'Y-m-d H:i:s'}}
+                        <span class="label label-success">分类</span>{{ article.category }}
+                </div>
+                    </div>
+                </div>
             </div>
         </div>
         {% else %}
         <div class="panel panel-danger">
-             <div class="panel-heading"><h4><a href="">{{ article.title }}</a></h4></div>
+            <div class="panel-heading">
+                {{ article.title }}
+            </div>
             <div class="panel-body">
-                    {{ article.desc }}
-                    <div class="pull-right">
-                        发布日期:<span class="fa fa-calendar">{{ article.date_publish | date:'Y-m-d'}}</span>
+                <div class="row">
+                    <div class="col-lg-12 m-b-md">
+                        {{ article.desc }}
+                        <div class="pull-right">
+                            <a href="">
+                                <button type="button" class="btn btn-success">详细阅读</button>
+                            </a>
+                        </div>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span class="label label-success">发布时间</span>{{ article.date_publish | date:'Y-m-d H:i:s'}}
+                        <span class="label label-success">分类</span>{{ article.category }}
+                    </div>
+                </div>
             </div>
         </div>
         {% endif %}
