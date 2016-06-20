@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper wrapper-content  animated fadeInRight article">
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="text-center">
+                        <h1>{{ article.title }}</h1>
+                        {# 获取每篇文章的标签,django多对多字段在模板里遍历数据 #}
+                        {% for i in article.tag.all %}
+                        <span class="label label-primary">{{ i.name }}</span>
+                        {% endfor %}
+                        <hr>
+                        <div class="text-left">{{ article.content }}</div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
