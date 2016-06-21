@@ -1,4 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load custom_markdown %}
+{% block extend-css %}
+    <link href="{% static 'highlight/monokai.css' %}" rel="stylesheet" >
+{% endblock extend-css %}
 {% block content %}
 <div class="wrapper wrapper-content  animated fadeInRight article">
     <div class="row">
@@ -12,7 +18,7 @@
                         <span class="label label-primary">{{ i.name }}</span>
                         {% endfor %}
                         <hr>
-                        <div class="text-left">{{ article.content }}</div>
+                        <div class="text-left">{{ article.content | custom_markdown }}</div>
                         <hr>
                     </div>
                 </div>
@@ -21,3 +27,7 @@
     </div>
 </div>
 {% endblock content %}
+{% block extend-js %}
+    <script src="{% static 'highlight/highlight.pack.js' %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock extend-js %}
