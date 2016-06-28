@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load custom_markdown %}
+{% block content %}
+<div class="col-md-8">
+    <h2 class="text-center">添加BLOG</h2>
+    <hr>
+    <form action='' method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">标题</label>
+        <input type="text" class="form-control" placeholder="在此输入标题" name="title">
+        <label for="name">分类</label>
+        <select class="form-control" name="category">
+                {# 遍历一对多字段:分类,前端页面通过choice标签显示数据 #}
+                {% for item in category %}
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                {% endfor %}
+        </select>
+        <label for="name">标签</label>
+        <br>
+                {# 遍历多对多字段:书签,前端页面通过复选框选取 #}
+                {% for item in tag %}
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="inlineCheckbox1" value="{{ item.id }}" name="tag">{{ item.name }}
+                </label>
+                {% endfor %}
+        <br>
+        <label for="name">文本</label>
+        <textarea class="form-control" rows="5" name="content"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">提 交</button>
+    <button type="reset"  class="btn btn-primary">重 置</button>
+    </form>
+</div>
+{% endblock content %}
