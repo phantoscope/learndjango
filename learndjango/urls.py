@@ -17,12 +17,13 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from django.conf import settings
+from django.views.static import serve
 from upload import upload_image
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    #django admin后台上传路径url
-    url(r"^upload/(?P<path>.*)$", "django.views.static.serve", {"document_root": settings.MEDIA_ROOT,}),
+    #返回图片上传路径url
+    url(r"^upload/(?P<path>.*)$",serve,{"document_root": settings.MEDIA_ROOT,}),
     #处理图片上传url方法
     url(r'^admin/upload/(?P<dir_name>[^/]+)$',upload_image, name='upload_image'),
     url(r'^blog/', include('blog.urls')),

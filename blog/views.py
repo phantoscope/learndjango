@@ -43,10 +43,11 @@ def blog_add(request):
         content = request.POST['content']
         category = request.POST['category']
         tag = request.POST.getlist('tag')
+        desc = request.POST['desc']
         #涉及到POST传递过来的数据包含普通数据和多对多,一对多数据,先处理完(保存)标准数据,在处理特殊数据
         #对于外键的数据处理
         foreignkey_cacategory = Category.objects.get(id=category) #先在分类表中查询出choice选中分类对应对象
-        b = Article(title=title,content=content,category=foreignkey_cacategory)
+        b = Article(title=title,content=content,category=foreignkey_cacategory,desc=desc)
         b.save()
         #处理多对多数据
         for blog_tag in tag:
@@ -66,3 +67,12 @@ def blog_add(request):
         {'category':category,'tag':tag},
         context_instance=RequestContext(request)
     )
+
+
+
+
+
+
+
+
+

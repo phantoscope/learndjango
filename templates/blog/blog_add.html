@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load custom_markdown %}
+{% block extend-css %}
+    <link href="{% static 'kindeditor/plugins/code/prettify.css' %}" rel="stylesheet">
+{% endblock %}
 {% block content %}
 <div class="col-md-8">
     <h2 class="text-center">添加BLOG</h2>
@@ -10,6 +12,8 @@
     <div class="form-group">
         <label for="name">标题</label>
         <input type="text" class="form-control" placeholder="在此输入标题" name="title">
+        <label for="name">描述</label>
+        <input type="text" class="form-control" placeholder="在此输入描述" name="desc">
         <label for="name">分类</label>
         <select class="form-control" name="category">
                 {# 遍历一对多字段:分类,前端页面通过choice标签显示数据 #}
@@ -34,3 +38,20 @@
     </form>
 </div>
 {% endblock content %}
+{% block extend-js %}
+    <script src="{% static 'kindeditor/kindeditor-all-min.js' %}"></script>
+    <script src="{% static 'kindeditor/plugins/code/prettify.js' %}"></script>
+
+    <script src="{% static 'kindeditor/lang/zh-CN.js' %}"></script>
+    <script>
+    KindEditor.ready(function(K) {
+        K.create('textarea[name=content]',{
+            cssPath:'/static/kindeditor/plugins/code/prettify.css',
+            height:"300",
+            width:"750",
+            uploadJson:'/blog/upload/blogimgs',
+        });
+        prettyPrint();
+    });
+    </script>
+{% endblock extend-js %}

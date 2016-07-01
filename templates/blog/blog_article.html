@@ -6,25 +6,22 @@
     <link href="{% static 'highlight/monokai.css' %}" rel="stylesheet" >
 {% endblock extend-css %}
 {% block content %}
-<div class="wrapper wrapper-content  animated fadeInRight article">
-    <div class="row">
-        <div class="col-lg-10 col-lg-offset-1">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <div class="text-center">
-                        <h1>{{ article.title }}</h1>
-                        {# 获取每篇文章的标签,django多对多字段在模板里遍历数据 #}
-                        {% for i in article.tag.all %}
-                        <span class="label label-primary">{{ i.name }}</span>
-                        {% endfor %}
-                        <hr>
-                        <div class="text-left">{{ article.content | custom_markdown }}</div>
-                        <hr>
-                    </div>
-                </div>
-            </div>
+<div class="col-lg-10 col-md-offset-1">
+        <div class="text-center">
+            <h1>{{ article.title }}</h1>
+            <img class="fengexian" src={% static 'img/fengexian.png' %}>
         </div>
-    </div>
+        <div class="text-left">
+            {{ article.content | custom_markdown }}
+            <hr>
+        </div>
+        {# 获取每篇文章的标签,django多对多字段在模板里遍历数据 #}
+        {% for i in article.tag.all %}
+            <span class="label label-primary">{{ i.name }}</span>
+        {% endfor %}
+</div>
+<div class="col-lg-1">
+        <button type="button" class="btn btn-danger">编辑</button>
 </div>
 {% endblock content %}
 {% block extend-js %}
