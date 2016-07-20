@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^add/$', views.blog_add, name='blog_add'),
     #前端kindeditor编辑器上传图片处理函数
     url(r'^upload/(?P<dir_name>[^/]+)$',upload_image,name='blog_uploadimg'),
+    url(r'^edit/(\d+)', views.blog_edit, name='blog_edit'),
+    url(r'^delete/(\d+)', views.blog_delete, name='blog_delete'),
 ]

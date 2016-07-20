@@ -21,10 +21,49 @@
         {% endfor %}
 </div>
 <div class="col-lg-1">
-        <button type="button" class="btn btn-danger">编辑</button>
+        <a href="{% url 'blog_edit' article.id %}">
+            <button type="button" class="btn btn-success">编辑</button>
+        </a>
+        <button class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id = {{ article.id }} data-title={{ article.title }} data-body={{ article.content }}>删除</button>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div class="modal-footer">
+                <form action={%url 'blog_delete' article.id %} method="POST">
+                  {% csrf_token %}
+                  <button type="button" class="btn btn-default" data-dismiss="modal">离开操作</button>
+                  <button type="submit" class="btn btn-danger" >确定删除</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
 </div>
 {% endblock content %}
 {% block extend-js %}
     <script src="{% static 'highlight/highlight.pack.js' %}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+       $("#myModal").on('show.bs.modal', function(event){
+        // Get button that triggered the modal
+        var button = $(event.relatedTarget);
+        // Extract value from data-* attributes
+        var titleBody = button.data('title');
+        $(this).find('.modal-title').text('您将要删除标题为如下的文章');
+        $(this).find('.modal-body').text(titleBody);
+    });
+});
+</script>
+
+
+
 {% endblock extend-js %}

@@ -26,14 +26,18 @@ def blog_index(request):
 
 
 # 文章详情
-def blog_article(request,blog_id):
-    article = Article.objects.get(id=blog_id)
+def blog_article(request,post_id):
+    article = Article.objects.get(id=post_id)
 
     #更新浏览数
     article.view_count += 1
     article.save()
 
-    return  render_to_response('blog/blog_article.html', {'article':article,'request':request})
+    return  render_to_response(
+            'blog/blog_article.html',
+            {'article':article,'request':request},
+            context_instance = RequestContext(request)
+            )
 
 
 #前端增加文章
@@ -69,8 +73,49 @@ def blog_add(request):
     )
 
 
+#前端编辑文章
+def blog_edit(request,post_id):
+    post = get_object_or_404(Article,id=post_id)
+    if request.method == "POST":
+        title = request.POST['title']
+        content = request.POST['content']
+        category = request.POST['category']
+        tag = request.POST.getlist('tag')
+        desc = request.POST['desc']
+        #涉及到POST传递过来的数据包含普通数据和多对多,一对多数据,先处理完(保存)标准数据,在处理特殊数据
+        #对于外键的数据处理
+        foreignkey_cacategory = Category.objects.get(id=category) #先在分类表中查询出choice选中分类对应对象
+        b = Article(title=title,content=content,category=foreignkey_cacategory,desc=desc)
+        b.save()
+        #处理多对多数据
+        for blog_tag in tag:
+            b.tag.add(blog_tag)
+        b.save()
+
+        #保存完post传递过来的所有数据,然后需要重定向页面,在django1.9,直接写入要重定向相应view函数名即可
+        return redirect('blog_article',b.id)
+
+    category = Category.objects.all()
+    tag = Tag.objects.all()
+    utagid = []
+
+    # 得出文章使用标签的id,把id放到列表里,然后前端模板通过if判断,来设置checkbox选项
+    for  utag in  post.tag.all():
+        utagid.append(utag.id)
 
 
+    return render_to_response(
+        'blog/blog_edit.html',
+        {'post': post,'category':category,'tag':tag,'utagid':utagid},
+        context_instance=RequestContext(request)
+    )
+
+
+#前端删除文章
+def blog_delete(request,post_id):
+    post = get_object_or_404(Article,id=post_id)
+    post.delete()
+    return redirect('blog_index')
 
 
 

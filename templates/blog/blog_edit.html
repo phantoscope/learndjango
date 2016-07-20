@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block extend-css %}
+    <link href="{% static 'kindeditor/plugins/code/prettify.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="col-md-8">
+    <h2 class="text-center">编辑BLOG</h2>
+    <hr>
+    <form action='' method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">标题</label>
+        <input type="text" class="form-control" name="title" value="{{ post.title }}">
+        <label for="name">描述</label>
+        <input type="text" class="form-control" name="desc" value="{{ post.desc }}">
+        <label for="name">分类</label>
+        <select class="form-control" name="category">
+                {% for item in category %}
+                    {# 判断上次保存的select选项,然后设置为选中,否则就遍历所有的分类,貌似中文字符无法判断,只能通过id来判断 #}
+                    {% ifequal post.category_id  item.id  %}
+                        <option value="{{ item.id }}" selected="selected">{{ item.name }}</option>
+                    {% else %}
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                    {% endifequal %}
+                {% endfor %}
+        </select>
+        <label for="name">标签</label>
+        <br>
+           {% for t in tag %}
+                <label class="checkbox-inline">
+                {# 通过view传递管来utagid列表来判断上次保存的checkox选项,如果在列表,设置为checked#}
+                {% if t.id in utagid %}
+                    <input type="checkbox" id="inlineCheckbox1" value="{{ t.id }}" name="tag" checked="checked">{{ t.name }}
+                {% else %}
+                    <input type="checkbox" id="inlineCheckbox1" value="{{ t.id }}" name="tag">{{ t.name }}
+                {% endif %}
+               </label>
+           {% endfor %}
+        <br>
+        <label for="name">文本</label>
+        <textarea class="form-control" rows="5" name="content">
+            {{ post.content }}
+        </textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">提 交</button>
+    <button type="reset"  class="btn btn-primary">重 置</button>
+    </form>
+</div>
+{% endblock content %}
+{% block extend-js %}
+    <script src="{% static 'kindeditor/kindeditor-all-min.js' %}"></script>
+    <script src="{% static 'kindeditor/plugins/code/prettify.js' %}"></script>
+
+    <script src="{% static 'kindeditor/lang/zh-CN.js' %}"></script>
+    <script>
+    KindEditor.ready(function(K) {
+        K.create('textarea[name=content]',{
+            cssPath:'/static/kindeditor/plugins/code/prettify.css',
+            height:"300",
+            width:"750",
+            uploadJson:'/blog/upload/blogimgs',
+        });
+        prettyPrint();
+    });
+    </script>
+{% endblock extend-js %}
